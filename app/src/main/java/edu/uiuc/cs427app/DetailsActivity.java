@@ -3,6 +3,7 @@ package edu.uiuc.cs427app;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Pair;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -11,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * Activity for the detailed view for each city
@@ -19,6 +22,11 @@ public class DetailsActivity extends AppCompatActivity {
     String username;
     ArrayList<String> cities;
     String cityName;
+
+    // only support map view for these cities
+    ArrayList<String> defaultCities = new ArrayList<>(
+            Arrays.asList("Champaign", "Chicago", "New York", "Los Angeles", "San Fransisco")
+    );
 
     /**
      * Sets the app theme based on the User's preferences
@@ -65,9 +73,18 @@ public class DetailsActivity extends AppCompatActivity {
 
         // TODO: Get the weather information from a Service that connects to a weather server and show the results
 
-        // Button functionality
+        // move to MapsActivity: show the map of city
         Button buttonMap = findViewById(R.id.mapButton);
-        buttonMap.setOnClickListener(v -> {});
+        buttonMap.setOnClickListener(v -> {
+            // only show the map if it is already in the default maps list
+            if (defaultCities.contains(cityName)) {
+                Intent addLocationIntent = new Intent(DetailsActivity.this, MapsActivity.class);
+                // pass in city name
+                addLocationIntent.putExtra("cityName", cityName);
+                startActivity(addLocationIntent);
+            }
+        });
+
 
         Button buttonRemove = findViewById(R.id.removeButton);
         buttonRemove.setOnClickListener(v -> {
