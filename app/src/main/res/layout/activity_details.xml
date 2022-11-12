@@ -11,9 +11,10 @@
         android:layout_width="409dp"
         android:layout_height="601dp"
         android:orientation="vertical"
+        android:padding="20px"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp"
-        tools:ignore="MissingConstraints">
+        tools:layout_editor_absoluteY="1dp">
 
         <TextView
             android:id="@+id/welcomeText"
@@ -27,13 +28,13 @@
 
         <Button
             android:id="@+id/mapButton"
-            android:layout_width="match_parent"
+            android:layout_width="380dp"
             android:layout_height="wrap_content"
             android:text="Show Map" />
 
         <Button
             android:id="@+id/removeButton"
-            android:layout_width="match_parent"
+            android:layout_width="380dp"
             android:layout_height="wrap_content"
             android:text="Remove City" />
     </LinearLayout>

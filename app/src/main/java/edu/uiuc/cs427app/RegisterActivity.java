@@ -79,7 +79,6 @@ public class RegisterActivity extends AppCompatActivity {
                             HashMap<String, String> map = new HashMap<>();
                             map.put("password", pass);
                             map.put("username", name);
-                            map.put("cities", "");
                             FirebaseDatabase.getInstance().getReference().child("users").child(name).setValue(map);
                             FirebaseDatabase.getInstance().getReference().child("users").child(name).child("settings").child("color").setValue(color);
 
