@@ -97,7 +97,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     .putExtra("cities", cities));
 
                             finish();
-                            LoginActivity.act.finish();
+                            if (LoginActivity.act != null) { LoginActivity.act.finish(); }
                         }
                     }
 

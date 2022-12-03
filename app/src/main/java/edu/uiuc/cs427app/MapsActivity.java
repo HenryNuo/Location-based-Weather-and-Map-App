@@ -2,7 +2,6 @@ package edu.uiuc.cs427app;
 
 import androidx.fragment.app.FragmentActivity;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Pair;
@@ -14,7 +13,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import edu.uiuc.cs427app.databinding.ActivityMapsBinding;
@@ -23,12 +21,13 @@ import edu.uiuc.cs427app.databinding.ActivityMapsBinding;
  * Activity for the map view of a city
  */
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
 
     // track the city passed in from the details page
     private String currentCity = "";
+
+    private String username;
 
     // Key: city name
     // Value: pair of location defined by (latitude, longitude)
@@ -40,15 +39,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      *      Chicago
      *      New York
      *      Los Angeles
-     *      San Fransisco
+     *      San Francisco
      */
     private void createLocationOfCities()
     {
         cities.put("Champaign", new Pair<>(40.11, -88.24));
         cities.put("Chicago", new Pair<>(41.88, -87.63));
-        cities.put("New York", new Pair<>(40.71, -74.0));
+        cities.put("New York City", new Pair<>(40.71, -74.0));
         cities.put("Los Angeles", new Pair<>(34.05, -118.24));
-        cities.put("San Fransisco", new Pair<>(37.77, -122.42));
+        cities.put("San Francisco", new Pair<>(37.77, -122.42));
     }
 
     /**
@@ -60,7 +59,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (color == 1) {
             setTheme(R.style.Theme_Red);
         } else {
-            System.out.println("hi");
             setTheme(R.style.Theme_Blue);
         }
     }
@@ -85,6 +83,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         super.onCreate(savedInstanceState);
         setUsersTheme(prefs);
+
+        username = prefs.getString("name","");
+        setTitle("Team 25 " + username);
 
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

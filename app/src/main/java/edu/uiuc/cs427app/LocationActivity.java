@@ -50,7 +50,7 @@ public class LocationActivity extends AppCompatActivity {
 
         // Process the Intent payload that has opened this Activity and show the information accordingly
         Intent currentIntent = getIntent();
-        cities = currentIntent.getStringArrayListExtra("cities");
+        cities = currentIntent.getStringArrayListExtra("cities") == null ? new ArrayList<>(): currentIntent.getStringArrayListExtra("cities");
 
         // Initializing the GUI elements
         String welcome = "Please add a city name in the input filed.";
@@ -62,7 +62,7 @@ public class LocationActivity extends AppCompatActivity {
 
         buttonMap.setOnClickListener(v -> {
             TextInputEditText textInput = findViewById(R.id.edit_city);
-            String text = textInput.getText().toString();
+            String text = textInput == null ? "" : textInput.getText().toString();
 
             cities.add(text);
 

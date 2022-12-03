@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             detailsButton.setOnClickListener(v -> {
                 Intent detailsIntent = new Intent(MainActivity.this, DetailsActivity.class);
                 detailsIntent.putExtra("cities", cities);
-                detailsIntent.putExtra("city", city);
+                detailsIntent.putExtra("cityName", city);
                 startActivity(detailsIntent);
             });
 

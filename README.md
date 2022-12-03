@@ -121,39 +121,39 @@ Meeting notes: Reviewing each member's work. Try all required functionality. Rec
 
 ### Week 6
 
-Members present: List the NetID of the people who attended the meeting
+Members present: calebct2, zepeili2, adtian2, zzou7, ag86, yutong9, nuox3
 
-Meeting notes: Explain the overall team progress and a summary of discussion
-
+Meeting notes: Read and analyzed what we should do for Milestone 4. Separate the task into two sub-tasks, and discuss what API should be called.
 | NetID           | Progress from last week          | Tasks for next week   |
 | --------------- | -------------------------------- | ----------------------|
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
+| zepeili2 | Read the document before meeting and prepare for the meeting | Participate in tasks development. Record the update. Prepare for the next meeting. |
+| calebct2 | NA (Since Milestone 4 not start yet, same for below)         | Develop task1 with Andrew and Andy                                                     |
+| zzou7    | NA                                                           | Develop task2 with Anastasia and Nuo                                            |
+| nuox3    | NA                                                           | Develop task2 with Anastasia and Zheng                                           |
+| adtian2  | NA                                                           | Develop task1 with Caleb and Andy                                      |
+| yutong9  | NA                                                           | Develop task1 with Andrew and Caleb                                     |
+| ag86     | NA                                                           | Develop task2 with Zheng and Nuo                      |
+|  |  |
 
 ---
 
 ### Week 7
 
-Members present: List the NetID of the people who attended the meeting
+Members present: calebct2, zepeili2, adtian2, zzou7, ag86, yutong9, nuox3
 
-Meeting notes: Explain the overall team progress and a summary of discussion
+Meeting notes: Reviewing code, showing functionality, and recording video.
 
 | NetID           | Progress from last week          | Tasks for next week   |
 | --------------- | -------------------------------- | ----------------------|
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
+| zepeili2 | Understand the process of each team and schedule the next meeting. | Read and understand the requirements for the next week (milestone 5) and prepare for the next meeting. |
+| calebct2 | Actively participated in developing task 1 finished all tasks with high quality work before the due date.      | NA                              |
+| zzou7    | Tried pair programming with Anastasia in developing task 2, and finished all tasks with high quality work before the due date.      |   NA        |
+| nuox3    | Actively participated in developing task 1, and finished all tasks with high quality work before the due date.      | NA                          |
+| adtian2  | Led the development of task1, finished all tasks with high quality work before the due date. Tested all functionalities. Adjusted part of the code to fit the milestone requirement.                                                           | NA                                    |
+| yutong9  | Worked with Andrew and Caleb on task1. Finished all tasks with high quality work before the due date.   | NA|
+| ag86     | Led the development of task2, finished all tasks with high quality work before the due date. Shared screen and finished most part of the code. |NA       |    
+|          |                       |
+
 
 ---
 

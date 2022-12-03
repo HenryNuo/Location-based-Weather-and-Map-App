@@ -29,7 +29,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCZc8ppDjLL-S9Eev1re1tCMdtaRXzHrMk" />
 
-
+        <activity
+            android:name=".WeatherActivity"
+            android:exported="false" />
         <activity
             android:name=".MapsActivity"
             android:exported="false"
