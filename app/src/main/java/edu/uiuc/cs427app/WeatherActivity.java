@@ -25,6 +25,9 @@ public class WeatherActivity extends AppCompatActivity {
     private String cityName;
     private String username;
 
+    private String oldAPIkey = "04d75a67876a481d8d4c94a0e9e06e44";
+    private String newAPIkey = "7b62bda796e44a44ab4500ba11c576df";
+
     /**
      * Sets the app theme based on the User's preferences
      * @param prefs - pointer to User's profile preferences
@@ -63,7 +66,8 @@ public class WeatherActivity extends AppCompatActivity {
 
         cityInfoMessage.setText(cityWeatherInfo);
 
-        String apiURL = "https://api.weatherbit.io/v2.0/current?city=" + cityName + "&country=US&key=04d75a67876a481d8d4c94a0e9e06e44&include=minutely";
+        String apiURL = "https://api.weatherbit.io/v2.0/current?city="
+                + cityName + "&country=US&key=" + newAPIkey + "&include=minutely";
         new WeatherActivity.WeatherApi().execute(apiURL);
     }
 

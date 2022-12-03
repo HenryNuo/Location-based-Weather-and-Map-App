@@ -46,10 +46,10 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("Login", MODE_PRIVATE);
 
         Boolean isLogin = prefs.getBoolean("isLogin",false);
-        if (isLogin) {
-            startActivity(new Intent(LoginActivity.this,MainActivity.class));
-            finish();
-        }
+//        if (isLogin) {
+//            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+//            finish();
+//        }
 
         bar = findViewById(R.id.progress);
         username = findViewById(R.id.edit_text_username);

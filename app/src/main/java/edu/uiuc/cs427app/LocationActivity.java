@@ -12,13 +12,14 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Activity for adding a city to the city list
  */
 public class LocationActivity extends AppCompatActivity {
     String username;
-    ArrayList<String> cities;
+    HashSet<String> cities;
 
     /**
      * Sets the app theme based on the User's preferences
@@ -50,7 +51,8 @@ public class LocationActivity extends AppCompatActivity {
 
         // Process the Intent payload that has opened this Activity and show the information accordingly
         Intent currentIntent = getIntent();
-        cities = currentIntent.getStringArrayListExtra("cities") == null ? new ArrayList<>(): currentIntent.getStringArrayListExtra("cities");
+        ArrayList<String> getCities = currentIntent.getStringArrayListExtra("cities");
+        cities = getCities == null ? new HashSet<>() : new HashSet<>(getCities);
 
         // Initializing the GUI elements
         String welcome = "Please add a city name in the input filed.";
@@ -64,12 +66,19 @@ public class LocationActivity extends AppCompatActivity {
             TextInputEditText textInput = findViewById(R.id.edit_city);
             String text = textInput == null ? "" : textInput.getText().toString();
 
-            cities.add(text);
+            if (!text.equals(""))
+            {
+                cities.add(text);
 
-            FirebaseDatabase.getInstance().getReference().child("users").child(username).child("cities").setValue(cities);
+                FirebaseDatabase.getInstance().getReference().child("users").child(username)
+                        .child("cities").setValue(new ArrayList<>(cities));
+            }
 
-            Intent addLocationIntent = new Intent(LocationActivity.this, MainActivity.class);
+            Intent addLocationIntent =
+                    new Intent(LocationActivity.this, MainActivity.class);
+
             addLocationIntent.putExtra("cities", cities);
+
             startActivity(addLocationIntent);
         });
     }

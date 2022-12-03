@@ -72,7 +72,7 @@ public class LocationChiTest {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-        SystemClock.sleep(100);
+        SystemClock.sleep(500);
         assert(cityCreated[0]);
 
     }

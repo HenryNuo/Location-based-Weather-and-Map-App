@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.Menu;
@@ -69,7 +70,10 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
                     cities = new ArrayList<>();
-                    cities.addAll((ArrayList<String>) task.getResult().getValue());
+                    Object db_cities = task.getResult().getValue();
+                    if (db_cities != null) {
+                        cities.addAll((ArrayList<String>) db_cities);
+                    }
 
                     renderList();
                 }
@@ -143,5 +147,14 @@ public class MainActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+    public void logout() {
+        SharedPreferences.Editor editor = getSharedPreferences("Login", MODE_PRIVATE).edit();
+        editor.putString("name", "");
+        editor.putString("password", "");
+        editor.putBoolean("isLogin", false);
+        editor.commit();
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        finish();
     }
 }
