@@ -45,7 +45,7 @@ public class AremoveCityTest {
                 .perform(click());
 
         // Wait database to Update
-        SystemClock.sleep(ONE_SECOND*3);
+        SystemClock.sleep(ONE_SECOND);
 
         // Check city is removed from database
         ArrayList<String> databaseCities = new ArrayList<>();
@@ -70,7 +70,7 @@ public class AremoveCityTest {
         assertFalse(databaseCities.contains(cityToRemove));
 
         // Wait for user to check result
-        SystemClock.sleep(ONE_SECOND*2);
+        SystemClock.sleep(ONE_SECOND);
     }
 
     /**

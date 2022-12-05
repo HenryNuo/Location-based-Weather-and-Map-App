@@ -160,29 +160,28 @@ Meeting notes: Reviewing code, showing functionality, and recording video.
 
 ### Week 8
 
-Members present: List the NetID of the people who attended the meeting
+Members present: calebct2, zepeili2, adtian2, zzou7, ag86, yutong9, nuox3
 
-Meeting notes: Explain the overall team progress and a summary of discussion
-
+Meeting notes: Read and analyzed what we should do for Milestone 5. Separate the task into 6 individual tasks, and discuss what kind of test should we write.
 | NetID           | Progress from last week          | Tasks for next week   |
 | --------------- | -------------------------------- | ----------------------|
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
+| zepeili2 | Read the document before meeting and prepare for the meeting | Participate in tasks development. Record the update. Prepare for the next meeting. |
+| calebct2 | NA (Since Milestone 5 not start yet, same for below)         | Testing user sign up                                                     |
+| zzou7    | NA                                                           | Testing removing an existing city                                            |
+| nuox3    | NA                                                           | Testing user login, Testing user log off                                          |
+| adtian2  | NA                                                           | Testing weather feature (two cities)                                      |
+| yutong9  | NA                                                           | Testing location feature (two cities)                                    |
+| ag86     | NA                                                           | Testing adding a new city                      |
+|  |  |
 
 ---
 
 
 ### Week 9
 
-Members present: List the NetID of the people who attended the meeting
+Members present: NA
 
-Meeting notes: Explain the overall team progress and a summary of discussion
+Meeting notes: NA Thanksgiving break 
 
 | NetID           | Progress from last week          | Tasks for next week   |
 | --------------- | -------------------------------- | ----------------------|
@@ -200,59 +199,22 @@ Meeting notes: Explain the overall team progress and a summary of discussion
 
 ### Week 10
 
-Members present: List the NetID of the people who attended the meeting
+Members present: calebct2, zepeili2, adtian2, zzou7, ag86, yutong9, nuox3
 
-Meeting notes: Explain the overall team progress and a summary of discussion
+Meeting notes: Reviewing each member's work. Try all required functionality. Record the video.
 
 | NetID           | Progress from last week          | Tasks for next week   |
 | --------------- | -------------------------------- | ----------------------|
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
+| zepeili2 | Understand the process of each group member and schedule the next meeting. | NA|
+| calebct2 | Finish testing user sign up        | NA                                               |
+| zzou7    | Finish testing removing an existing city. Help to re-design the tests which made the tests more robust.      |   NA                        |
+| nuox3    | Finish testing user login, testing user log off      | NA                          |
+| adtian2  | Finish testing weather feature (two cities). Showed all the functionality during the meeting and helped to do the video recording.                                                           | NA                                    |
+| yutong9  | Finish testing location feature (two cities)   | NA|
+| ag86     | Finish testing adding a new city. Help with debugging the test code.   |NA       |    
+|          |                       |
 
 ---
 
 
-### Week 11
 
-Members present: List the NetID of the people who attended the meeting
-
-Meeting notes: Explain the overall team progress and a summary of discussion
-
-| NetID           | Progress from last week          | Tasks for next week   |
-| --------------- | -------------------------------- | ----------------------|
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-
----
-
-
-### Week 12
-
-Members present: List the NetID of the people who attended the meeting
-
-Meeting notes: Explain the overall team progress and a summary of discussion
-
-| NetID           | Progress from last week          | Tasks for next week   |
-| --------------- | -------------------------------- | ----------------------|
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-|                 |                                  |                       |
-
----

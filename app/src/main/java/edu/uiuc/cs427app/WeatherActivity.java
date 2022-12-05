@@ -67,7 +67,7 @@ public class WeatherActivity extends AppCompatActivity {
         cityInfoMessage.setText(cityWeatherInfo);
 
         String apiURL = "https://api.weatherbit.io/v2.0/current?city="
-                + cityName + "&country=US&key=" + newAPIkey + "&include=minutely";
+                + cityName + "&country=US&key=" + oldAPIkey + "&include=minutely";
         new WeatherActivity.WeatherApi().execute(apiURL);
     }
 

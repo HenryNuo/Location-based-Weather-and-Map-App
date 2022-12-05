@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MainActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CS427App</a> &gt; <a href="index.source.html" class="el_package">edu.uiuc.cs427app</a> &gt; <span class="el_source">MainActivity.java</span></div><h1>MainActivity.java</h1><pre class="source lang-java linenums">package edu.uiuc.cs427app;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.view.Menu;
+import android.view.MenuItem;
+
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+
+/**
+ * Activity that displays the user's city list
+ */
+<span class="fc" id="L25">public class MainActivity extends AppCompatActivity {</span>
+    String username;
+    ArrayList&lt;String&gt; cities;
+
+    /**
+     * Sets the app theme based on the User's preferences
+     * @param prefs - pointer to User's profile preferences
+     */
+    public void setUsersTheme(SharedPreferences prefs) {
+<span class="fc" id="L34">        int color = prefs.getInt(&quot;color&quot;,1);</span>
+
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (color == 1) {</span>
+<span class="fc" id="L37">            setTheme(R.style.Theme_Red);</span>
+
+        } else {
+<span class="fc" id="L40">            setTheme(R.style.Theme_Blue);</span>
+        }
+<span class="fc" id="L42">    }</span>
+
+    /**
+     * Runs when MainActivity is rendered
+     * @param savedInstanceState
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L50">        SharedPreferences prefs = getSharedPreferences(&quot;Login&quot;, MODE_PRIVATE);</span>
+
+<span class="fc" id="L52">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L53">        setUsersTheme(prefs);</span>
+<span class="fc" id="L54">        setContentView(R.layout.activity_main);</span>
+
+<span class="fc" id="L56">        username = prefs.getString(&quot;name&quot;,&quot;&quot;);</span>
+<span class="fc" id="L57">        setTitle(&quot;Team 25 &quot; + username);</span>
+
+        // Process the Intent payload that has opened this Activity and show the information accordingly
+<span class="fc" id="L60">        Intent currentIntent = getIntent();</span>
+<span class="fc" id="L61">        cities = currentIntent.getStringArrayListExtra(&quot;cities&quot;);</span>
+
+        // runs when user opens app when still logged in
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (cities == null) {</span>
+
+            // gets city data for user
+<span class="fc" id="L67">            FirebaseDatabase.getInstance().getReference().child(&quot;users&quot;).child(username).child(&quot;cities&quot;).get().addOnCompleteListener(task -&gt; {</span>
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">                if (!task.isSuccessful()) {</span>
+<span class="nc" id="L69">                    System.out.println(&quot;error&quot;);</span>
+
+                } else {
+<span class="fc" id="L72">                    cities = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L73">                    Object db_cities = task.getResult().getValue();</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">                    if (db_cities != null) {</span>
+<span class="fc" id="L75">                        cities.addAll((ArrayList&lt;String&gt;) db_cities);</span>
+                    }
+
+<span class="fc" id="L78">                    renderList();</span>
+                }
+<span class="fc" id="L80">            });</span>
+
+        } else { // runs when the user registers or logs in
+<span class="fc" id="L83">            renderList();</span>
+        }
+<span class="fc" id="L85">    }</span>
+
+    /**
+     * Creates UI components dynamically based on user's city list
+     */
+    public void renderList() {
+<span class="fc" id="L91">        LinearLayout llMain = findViewById(R.id.mainLayout);</span>
+
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        for (String city : cities) {</span>
+<span class="fc" id="L94">            LinearLayout parentLayout = new LinearLayout(MainActivity.this);</span>
+<span class="fc" id="L95">            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(</span>
+                    LinearLayout.LayoutParams.MATCH_PARENT, 200);
+<span class="fc" id="L97">            parentLayout.setLayoutParams(params);</span>
+<span class="fc" id="L98">            parentLayout.setOrientation(LinearLayout.HORIZONTAL);</span>
+
+<span class="fc" id="L100">            TextView cityName = new TextView(MainActivity.this);</span>
+<span class="fc" id="L101">            cityName.setWidth(400);</span>
+<span class="fc" id="L102">            cityName.setText(city);</span>
+
+            // Button functionality for DetailsActivity to see weather and map data for city
+<span class="fc" id="L105">            Button detailsButton = new Button(MainActivity.this);</span>
+<span class="fc" id="L106">            detailsButton.setText(&quot;Show Details&quot;);</span>
+<span class="fc" id="L107">            detailsButton.setOnClickListener(v -&gt; {</span>
+<span class="nc" id="L108">                Intent detailsIntent = new Intent(MainActivity.this, DetailsActivity.class);</span>
+<span class="nc" id="L109">                detailsIntent.putExtra(&quot;cities&quot;, cities);</span>
+<span class="nc" id="L110">                detailsIntent.putExtra(&quot;cityName&quot;, city);</span>
+<span class="nc" id="L111">                startActivity(detailsIntent);</span>
+<span class="nc" id="L112">            });</span>
+
+<span class="fc" id="L114">            parentLayout.addView(cityName);</span>
+<span class="fc" id="L115">            parentLayout.addView(detailsButton);</span>
+
+<span class="fc" id="L117">            llMain.addView(parentLayout);</span>
+<span class="fc" id="L118">        }</span>
+
+        // Button functionality for LocationActivity to add cities to list
+<span class="fc" id="L121">        Button buttonAddLocation = findViewById(R.id.buttonAddLocation);</span>
+
+<span class="fc" id="L123">        buttonAddLocation.setOnClickListener(v -&gt; {</span>
+            // Implement this action to add a new location to the list of locations
+<span class="fc" id="L125">            Intent addLocationIntent = new Intent(this, LocationActivity.class);</span>
+<span class="fc" id="L126">            addLocationIntent.putExtra(&quot;cities&quot;, cities);</span>
+<span class="fc" id="L127">            startActivity(addLocationIntent);</span>
+<span class="fc" id="L128">        });</span>
+<span class="fc" id="L129">    }</span>
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+<span class="fc" id="L133">        getMenuInflater().inflate(R.menu.top_menu,menu);</span>
+<span class="fc" id="L134">        return true;</span>
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+<span class="nc bnc" id="L139" title="All 2 branches missed.">        if (item.getItemId()==R.id.logout) {</span>
+<span class="nc" id="L140">            SharedPreferences.Editor editor = getSharedPreferences(&quot;Login&quot;, MODE_PRIVATE).edit();</span>
+<span class="nc" id="L141">            editor.putString(&quot;name&quot;, &quot;&quot;);</span>
+<span class="nc" id="L142">            editor.putString(&quot;password&quot;, &quot;&quot;);</span>
+<span class="nc" id="L143">            editor.putBoolean(&quot;isLogin&quot;, false);</span>
+<span class="nc" id="L144">            editor.commit();</span>
+<span class="nc" id="L145">            startActivity(new Intent(MainActivity.this,LoginActivity.class));</span>
+<span class="nc" id="L146">            finish();</span>
+
+        }
+<span class="nc" id="L149">        return super.onOptionsItemSelected(item);</span>
+    }
+    public void logout() {
+<span class="fc" id="L152">        SharedPreferences.Editor editor = getSharedPreferences(&quot;Login&quot;, MODE_PRIVATE).edit();</span>
+<span class="fc" id="L153">        editor.putString(&quot;name&quot;, &quot;&quot;);</span>
+<span class="fc" id="L154">        editor.putString(&quot;password&quot;, &quot;&quot;);</span>
+<span class="fc" id="L155">        editor.putBoolean(&quot;isLogin&quot;, false);</span>
+<span class="fc" id="L156">        editor.commit();</span>
+<span class="fc" id="L157">        startActivity(new Intent(MainActivity.this, LoginActivity.class));</span>
+<span class="fc" id="L158">        finish();</span>
+<span class="fc" id="L159">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

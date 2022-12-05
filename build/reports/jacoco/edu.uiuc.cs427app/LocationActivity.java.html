@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LocationActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CS427App</a> &gt; <a href="index.source.html" class="el_package">edu.uiuc.cs427app</a> &gt; <span class="el_source">LocationActivity.java</span></div><h1>LocationActivity.java</h1><pre class="source lang-java linenums">package edu.uiuc.cs427app;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+
+/**
+ * Activity for adding a city to the city list
+ */
+<span class="fc" id="L20">public class LocationActivity extends AppCompatActivity {</span>
+    String username;
+    HashSet&lt;String&gt; cities;
+
+    /**
+     * Sets the app theme based on the User's preferences
+     * @param prefs - pointer to User's profile preferences
+     */
+    private void setUsersTheme(SharedPreferences prefs) {
+<span class="fc" id="L29">        int color = prefs.getInt(&quot;color&quot;,1);</span>
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        if (color == 1) {</span>
+<span class="nc" id="L31">            setTheme(R.style.Theme_Red);</span>
+
+        } else {
+<span class="fc" id="L34">            setTheme(R.style.Theme_Blue);</span>
+        }
+<span class="fc" id="L36">    }</span>
+
+    /**
+     * Runs when LocationActivity is rendered
+     * @param savedInstanceState
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L44">        SharedPreferences prefs = getSharedPreferences(&quot;Login&quot;, MODE_PRIVATE);</span>
+
+<span class="fc" id="L46">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L47">        setUsersTheme(prefs);</span>
+<span class="fc" id="L48">        setContentView(R.layout.activity_location);</span>
+
+<span class="fc" id="L50">        username = prefs.getString(&quot;name&quot;,&quot;&quot;);</span>
+
+        // Process the Intent payload that has opened this Activity and show the information accordingly
+<span class="fc" id="L53">        Intent currentIntent = getIntent();</span>
+<span class="fc" id="L54">        ArrayList&lt;String&gt; getCities = currentIntent.getStringArrayListExtra(&quot;cities&quot;);</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        cities = getCities == null ? new HashSet&lt;&gt;() : new HashSet&lt;&gt;(getCities);</span>
+
+        // Initializing the GUI elements
+<span class="fc" id="L58">        String welcome = &quot;Please add a city name in the input filed.&quot;;</span>
+<span class="fc" id="L59">        TextView welcomeMessage = findViewById(R.id.welcomeText);</span>
+<span class="fc" id="L60">        welcomeMessage.setText(welcome);</span>
+
+        // Button functionality
+<span class="fc" id="L63">        Button buttonMap = findViewById(R.id.buttonAddLocation);</span>
+
+<span class="fc" id="L65">        buttonMap.setOnClickListener(v -&gt; {</span>
+<span class="fc" id="L66">            TextInputEditText textInput = findViewById(R.id.edit_city);</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">            String text = textInput == null ? &quot;&quot; : textInput.getText().toString();</span>
+
+<span class="fc bfc" id="L69" title="All 2 branches covered.">            if (!text.equals(&quot;&quot;))</span>
+            {
+<span class="fc" id="L71">                cities.add(text);</span>
+
+<span class="fc" id="L73">                FirebaseDatabase.getInstance().getReference().child(&quot;users&quot;).child(username)</span>
+<span class="fc" id="L74">                        .child(&quot;cities&quot;).setValue(new ArrayList&lt;&gt;(cities));</span>
+            }
+
+<span class="fc" id="L77">            Intent addLocationIntent =</span>
+                    new Intent(LocationActivity.this, MainActivity.class);
+
+<span class="fc" id="L80">            addLocationIntent.putExtra(&quot;cities&quot;, cities);</span>
+
+<span class="fc" id="L82">            startActivity(addLocationIntent);</span>
+<span class="fc" id="L83">        });</span>
+<span class="fc" id="L84">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

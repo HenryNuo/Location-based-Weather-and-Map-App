@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WeatherActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CS427App</a> &gt; <a href="index.source.html" class="el_package">edu.uiuc.cs427app</a> &gt; <span class="el_source">WeatherActivity.java</span></div><h1>WeatherActivity.java</h1><pre class="source lang-java linenums">package edu.uiuc.cs427app;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+/**
+ * Activity for the weather information for each city
+ */
+<span class="fc" id="L24">public class WeatherActivity extends AppCompatActivity {</span>
+    private String cityName;
+    private String username;
+
+<span class="fc" id="L28">    private String oldAPIkey = &quot;04d75a67876a481d8d4c94a0e9e06e44&quot;;</span>
+<span class="fc" id="L29">    private String newAPIkey = &quot;7b62bda796e44a44ab4500ba11c576df&quot;;</span>
+
+    /**
+     * Sets the app theme based on the User's preferences
+     * @param prefs - pointer to User's profile preferences
+     */
+    private void setUsersTheme(SharedPreferences prefs) {
+<span class="fc" id="L36">        int color = prefs.getInt(&quot;color&quot;,1);</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (color == 1) {</span>
+<span class="nc" id="L38">            setTheme(R.style.Theme_Red);</span>
+        } else {
+<span class="fc" id="L40">            setTheme(R.style.Theme_Blue);</span>
+        }
+<span class="fc" id="L42">    }</span>
+
+    /**
+     * Runs when WeatherActivity is rendered
+     * @param savedInstanceState
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L50">        super.onCreate(savedInstanceState);</span>
+
+<span class="fc" id="L52">        SharedPreferences prefs = getSharedPreferences(&quot;Login&quot;, MODE_PRIVATE);</span>
+<span class="fc" id="L53">        setUsersTheme(prefs);</span>
+<span class="fc" id="L54">        setContentView(R.layout.activity_weather);</span>
+
+<span class="fc" id="L56">        username = prefs.getString(&quot;name&quot;,&quot;&quot;);</span>
+<span class="fc" id="L57">        setTitle(&quot;Team 25 &quot; + username);</span>
+
+<span class="fc" id="L59">        Intent currentIntent = getIntent();</span>
+<span class="fc" id="L60">        cityName = currentIntent.getStringExtra(&quot;cityName&quot;);</span>
+
+<span class="fc" id="L62">        String cityWeatherInfo = &quot;Detailed information about the weather of &quot; + cityName;</span>
+
+        // Initializing the GUI elements
+<span class="fc" id="L65">        TextView cityInfoMessage = findViewById(R.id.cityInfo);</span>
+
+<span class="fc" id="L67">        cityInfoMessage.setText(cityWeatherInfo);</span>
+
+<span class="fc" id="L69">        String apiURL = &quot;https://api.weatherbit.io/v2.0/current?city=&quot;</span>
+                + cityName + &quot;&amp;country=US&amp;key=&quot; + newAPIkey + &quot;&amp;include=minutely&quot;;
+<span class="fc" id="L71">        new WeatherActivity.WeatherApi().execute(apiURL);</span>
+<span class="fc" id="L72">    }</span>
+
+    /**
+     * Class that runs in async to call weather API
+     */
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">    private class WeatherApi extends AsyncTask&lt;String, Void, String&gt; {</span>
+        /**
+         * Handles API connection and gets response
+         * @param params apiURL
+         * @return String of all the JSON
+         */
+        @Override
+        protected String doInBackground(String... params) {
+<span class="fc" id="L85">            String apiURL = params[0];</span>
+
+<span class="fc" id="L87">            URL url = null;</span>
+            try {
+<span class="fc" id="L89">                url = new URL(apiURL);</span>
+<span class="nc" id="L90">            } catch (MalformedURLException e) {</span>
+<span class="nc" id="L91">                e.printStackTrace();</span>
+<span class="fc" id="L92">            }</span>
+
+            // establishes connection
+<span class="fc" id="L95">            HttpURLConnection urlConnection = null;</span>
+            try {
+<span class="pc bpc" id="L97" title="2 of 4 branches missed.">                assert url != null;</span>
+<span class="fc" id="L98">                urlConnection = (HttpURLConnection) url.openConnection();</span>
+<span class="nc" id="L99">            } catch (IOException e) {</span>
+<span class="nc" id="L100">                e.printStackTrace();</span>
+<span class="fc" id="L101">            }</span>
+
+<span class="fc" id="L103">            String response = &quot;&quot;;</span>
+            try {
+                // reads in response
+<span class="fc" id="L106">                BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));</span>
+<span class="fc" id="L107">                StringBuilder sb = new StringBuilder();</span>
+                String line;
+<span class="fc bfc" id="L109" title="All 2 branches covered.">                while ((line = br.readLine()) != null) {</span>
+<span class="fc" id="L110">                    sb.append(line).append(&quot;\n&quot;);</span>
+                }
+<span class="fc" id="L112">                br.close();</span>
+
+<span class="fc" id="L114">                response = sb.toString();</span>
+<span class="fc" id="L115">                System.out.println(response);</span>
+
+<span class="nc" id="L117">            } catch (IOException e) {</span>
+<span class="nc" id="L118">                e.printStackTrace();</span>
+            } finally {
+<span class="fc" id="L120">                urlConnection.disconnect();</span>
+            }
+
+<span class="fc" id="L123">            return response;</span>
+        }
+
+        /**
+         * Handles the response and displays the information to the user
+         * @param result String of the JSON from the weather API
+         */
+        @Override
+        protected void onPostExecute(String result) {
+<span class="fc" id="L132">            super.onPostExecute(result);</span>
+
+            // parsing result to JSON object
+<span class="fc" id="L135">            JSONObject object = null;</span>
+            try {
+<span class="fc" id="L137">                object = new JSONObject(result);</span>
+<span class="nc" id="L138">            } catch (JSONException e) {</span>
+<span class="nc" id="L139">                e.printStackTrace();</span>
+<span class="fc" id="L140">            }</span>
+
+            // parsing the JSON object into data we want
+            try {
+<span class="fc" id="L144">                JSONObject data = object.getJSONArray(&quot;data&quot;).getJSONObject(0);</span>
+<span class="fc" id="L145">                String city_name = (String) data.get(&quot;city_name&quot;);</span>
+<span class="fc" id="L146">                String observation_time = (String) data.get(&quot;ob_time&quot;);</span>
+<span class="fc" id="L147">                String temperature = String.valueOf(data.get(&quot;temp&quot;)); // in Celsius</span>
+
+<span class="fc" id="L149">                JSONObject weather = data.getJSONObject(&quot;weather&quot;);</span>
+<span class="fc" id="L150">                String weather_description = (String) weather.get(&quot;description&quot;);</span>
+
+<span class="fc" id="L152">                int cloudIndex = (int) data.get(&quot;clouds&quot;);</span>
+<span class="fc" id="L153">                String relative_humidity = String.valueOf(data.get(&quot;rh&quot;)); // in %</span>
+
+                // direction wind is coming from
+<span class="fc" id="L156">                String wind_direction = (String) data.get(&quot;wind_cdir_full&quot;);</span>
+<span class="fc" id="L157">                String wind_speed = String.valueOf(data.get(&quot;wind_spd&quot;)); // in m/s</span>
+
+<span class="fc" id="L159">                TextView cityWeatherInfo = findViewById(R.id.cityInfo);</span>
+<span class="fc" id="L160">                String text = (String) cityWeatherInfo.getText();</span>
+<span class="fc" id="L161">                text += &quot;\nTime: &quot; + observation_time + &quot;\n&quot;;</span>
+<span class="fc" id="L162">                text += &quot;Temperature: &quot; + temperature + &quot; C\n&quot;;</span>
+<span class="fc" id="L163">                text += &quot;Weather: &quot; + weather_description + &quot;\n&quot;;</span>
+<span class="fc" id="L164">                text += &quot;Humidity: &quot; + relative_humidity + &quot;%\n&quot;;</span>
+<span class="fc" id="L165">                text += &quot;Cloud: &quot; + getCloudyStatus(cloudIndex) + &quot;\n&quot;;</span>
+<span class="fc" id="L166">                text += &quot;Wind: &quot; + wind_direction + &quot; at &quot; + wind_speed + &quot; m/s&quot;;</span>
+<span class="fc" id="L167">                cityWeatherInfo.setText(text);</span>
+<span class="fc" id="L168">                cityWeatherInfo.setBackgroundResource(R.drawable.weather1);</span>
+<span class="nc" id="L169">            } catch (JSONException e) {</span>
+<span class="nc" id="L170">                e.printStackTrace();</span>
+<span class="fc" id="L171">            }</span>
+<span class="fc" id="L172">        }</span>
+
+        private String getCloudyStatus(int cloudIndex) {
+            /**
+             * 0-10%  Sunny/Clear
+             * 10-20% Fair
+             * 20-30% Mostly sunny
+             * 30-60% Partly cloudy
+             * 60-70% Partly sunny
+             * 70-90% Mostly cloudy
+             * 90-100% Overcast
+             *
+             */
+<span class="pc bpc" id="L185" title="1 of 4 branches missed.">            if (cloudIndex &gt;= 0 &amp;&amp; cloudIndex &lt; 10 ) return &quot;Sunny/Clear&quot;;</span>
+<span class="pc bpc" id="L186" title="2 of 4 branches missed.">            else if (cloudIndex &gt;= 10 &amp;&amp; cloudIndex &lt; 20 ) return &quot;Fair&quot;;</span>
+<span class="pc bpc" id="L187" title="2 of 4 branches missed.">            else if (cloudIndex &gt;= 20 &amp;&amp; cloudIndex &lt; 30 ) return &quot;Mostly sunny&quot;;</span>
+<span class="nc bnc" id="L188" title="All 4 branches missed.">            else if (cloudIndex &gt;= 30 &amp;&amp; cloudIndex &lt; 60 ) return &quot;Partly cloudy&quot;;</span>
+<span class="nc bnc" id="L189" title="All 4 branches missed.">            else if (cloudIndex &gt;= 60 &amp;&amp; cloudIndex &lt; 70 ) return &quot;Partly sunny&quot;;</span>
+<span class="nc bnc" id="L190" title="All 4 branches missed.">            else if (cloudIndex &gt;= 70 &amp;&amp; cloudIndex &lt; 90 ) return &quot;Mostly cloudy&quot;;</span>
+<span class="nc bnc" id="L191" title="All 4 branches missed.">            else if (cloudIndex &gt;= 90 &amp;&amp; cloudIndex &lt; 100 ) return &quot;Overcast&quot;;</span>
+<span class="nc" id="L192">            else return &quot;Unknown&quot;;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

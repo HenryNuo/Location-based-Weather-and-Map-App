@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MapsActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CS427App</a> &gt; <a href="index.source.html" class="el_package">edu.uiuc.cs427app</a> &gt; <span class="el_source">MapsActivity.java</span></div><h1>MapsActivity.java</h1><pre class="source lang-java linenums">package edu.uiuc.cs427app;
+
+import androidx.fragment.app.FragmentActivity;
+
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.util.Pair;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.HashMap;
+
+import edu.uiuc.cs427app.databinding.ActivityMapsBinding;
+
+/**
+ * Activity for the map view of a city
+ */
+<span class="nc" id="L23">public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {</span>
+    private GoogleMap mMap;
+    private ActivityMapsBinding binding;
+
+    // track the city passed in from the details page
+<span class="nc" id="L28">    private String currentCity = &quot;&quot;;</span>
+
+    private String username;
+
+    // Key: city name
+    // Value: pair of location defined by (latitude, longitude)
+<span class="nc" id="L34">    private HashMap&lt;String, Pair&lt;Double, Double&gt;&gt; cities = new HashMap&lt;&gt;();</span>
+
+    /**
+     * Add the following cities to the cities hashmap:
+     *      Champaign
+     *      Chicago
+     *      New York
+     *      Los Angeles
+     *      San Francisco
+     */
+    private void createLocationOfCities()
+    {
+<span class="nc" id="L46">        cities.put(&quot;Champaign&quot;, new Pair&lt;&gt;(40.11, -88.24));</span>
+<span class="nc" id="L47">        cities.put(&quot;Chicago&quot;, new Pair&lt;&gt;(41.88, -87.63));</span>
+<span class="nc" id="L48">        cities.put(&quot;New York City&quot;, new Pair&lt;&gt;(40.71, -74.0));</span>
+<span class="nc" id="L49">        cities.put(&quot;Los Angeles&quot;, new Pair&lt;&gt;(34.05, -118.24));</span>
+<span class="nc" id="L50">        cities.put(&quot;San Francisco&quot;, new Pair&lt;&gt;(37.77, -122.42));</span>
+<span class="nc" id="L51">    }</span>
+
+    /**
+     * Sets the app theme based on the User's preferences
+     * @param prefs - pointer to User's profile preferences
+     */
+    private void setUsersTheme(SharedPreferences prefs) {
+<span class="nc" id="L58">        int color = prefs.getInt(&quot;color&quot;,1);</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (color == 1) {</span>
+<span class="nc" id="L60">            setTheme(R.style.Theme_Red);</span>
+        } else {
+<span class="nc" id="L62">            setTheme(R.style.Theme_Blue);</span>
+        }
+<span class="nc" id="L64">    }</span>
+
+    /**
+     * Runs when MapsActivity is rendered
+     * @param savedInstanceState
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // create dictionary of cities and location
+<span class="nc" id="L73">        createLocationOfCities();</span>
+
+        // get the passed in city name from the previous page
+<span class="nc" id="L76">        Bundle extras = getIntent().getExtras();</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        if (extras != null) {</span>
+<span class="nc" id="L78">            currentCity = extras.getString(&quot;cityName&quot;);</span>
+        }
+
+        // get user's preferences
+<span class="nc" id="L82">        SharedPreferences prefs = getSharedPreferences(&quot;Login&quot;, MODE_PRIVATE);</span>
+
+<span class="nc" id="L84">        super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L85">        setUsersTheme(prefs);</span>
+
+<span class="nc" id="L87">        username = prefs.getString(&quot;name&quot;,&quot;&quot;);</span>
+<span class="nc" id="L88">        setTitle(&quot;Team 25 &quot; + username);</span>
+
+<span class="nc" id="L90">        binding = ActivityMapsBinding.inflate(getLayoutInflater());</span>
+<span class="nc" id="L91">        setContentView(binding.getRoot());</span>
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+<span class="nc" id="L94">        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()</span>
+<span class="nc" id="L95">                .findFragmentById(R.id.map);</span>
+<span class="nc" id="L96">        mapFragment.getMapAsync(this);</span>
+<span class="nc" id="L97">    }</span>
+
+    /**
+     * @brief Manipulates the map, of a city, once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we add markers and zoom the map's camera.
+     *
+     * @warning If Google Play services is not installed on the device, the user will be prompted
+     * to install it inside the SupportMapFragment. This method will only be triggered once
+     * the user has installed Google Play services and returned to the app.
+     */
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+<span class="nc" id="L110">        mMap = googleMap;</span>
+
+        // get the city's location (lat, long)
+<span class="nc" id="L113">        Pair&lt;Double, Double&gt; location = cities.get(currentCity);</span>
+<span class="nc" id="L114">        double latitude = location.first;</span>
+<span class="nc" id="L115">        double longitude = location.second;</span>
+
+        // Add a marker that display's the city name and location
+<span class="nc" id="L118">        LatLng city = new LatLng(latitude, longitude);</span>
+<span class="nc" id="L119">        mMap.addMarker(new MarkerOptions().position(city).title(currentCity +</span>
+<span class="nc" id="L120">                &quot; (&quot; + latitude + &quot;, &quot; + longitude + &quot;)&quot;)).showInfoWindow();</span>
+
+        // set camera to lat. and long. with respect to zoom
+<span class="nc" id="L123">        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(city, 10.0f));</span>
+<span class="nc" id="L124">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

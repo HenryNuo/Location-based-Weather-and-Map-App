@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoginActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CS427App</a> &gt; <a href="index.source.html" class="el_package">edu.uiuc.cs427app</a> &gt; <span class="el_source">LoginActivity.java</span></div><h1>LoginActivity.java</h1><pre class="source lang-java linenums">package edu.uiuc.cs427app;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+
+/**
+ * Activity that allows user to login
+ */
+<span class="fc" id="L27">public class LoginActivity extends AppCompatActivity {</span>
+    EditText username,password;
+    Button btnLogin;
+    ProgressBar bar;
+
+    public static Activity act;
+
+    /**
+     * Runs when LoginActivity is rendered
+     * @param savedInstanceState
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L40">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L41">        setContentView(R.layout.activity_login);</span>
+<span class="fc" id="L42">        act = this;</span>
+
+<span class="fc" id="L44">        TextView tvsignup = findViewById(R.id.loginhere);</span>
+<span class="pc" id="L45">        tvsignup.setOnClickListener(view -&gt; startActivity(new Intent(LoginActivity.this,RegisterActivity.class)));</span>
+<span class="fc" id="L46">        SharedPreferences prefs = getSharedPreferences(&quot;Login&quot;, MODE_PRIVATE);</span>
+
+<span class="fc" id="L48">        Boolean isLogin = prefs.getBoolean(&quot;isLogin&quot;,false);</span>
+//        if (isLogin) {
+//            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+//            finish();
+//        }
+
+<span class="fc" id="L54">        bar = findViewById(R.id.progress);</span>
+<span class="fc" id="L55">        username = findViewById(R.id.edit_text_username);</span>
+<span class="fc" id="L56">        password = findViewById(R.id.edit_text_pass);</span>
+<span class="fc" id="L57">        btnLogin = findViewById(R.id.letTheUserLogIn);</span>
+
+        /**
+         * Add onclick listener to be triggered whenever login button is pressed
+         */
+<span class="fc" id="L62">        btnLogin.setOnClickListener(view -&gt; {</span>
+<span class="fc" id="L63">            String name = username.getText().toString();</span>
+<span class="fc" id="L64">            String pass = password.getText().toString();</span>
+
+<span class="fc bfc" id="L66" title="All 2 branches covered.">            if (name.isEmpty()) {</span>
+<span class="fc" id="L67">                username.setError(&quot;Enter Username&quot;);</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">            } else if (pass.isEmpty()) {</span>
+<span class="fc" id="L69">                password.setError(&quot;Enter Password&quot;);</span>
+            } else {
+<span class="fc" id="L71">                bar.setVisibility(View.VISIBLE);</span>
+                /**
+                 * Calls firebase instance to retrieve data given a username
+                 */
+<span class="fc" id="L75">                FirebaseDatabase.getInstance().getReference().child(&quot;users&quot;).child(name).addValueEventListener(new ValueEventListener() {</span>
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+<span class="fc bfc" id="L78" title="All 2 branches covered.">                        if (dataSnapshot.hasChildren()) {</span>
+<span class="fc" id="L79">                            String password1 = dataSnapshot.child(&quot;password&quot;).getValue(String.class);</span>
+<span class="fc" id="L80">                            int color = dataSnapshot.child(&quot;settings&quot;).child(&quot;color&quot;).getValue(Integer.class);</span>
+
+<span class="fc bfc" id="L82" title="All 2 branches covered.">                            if (password1.equals(pass)) {</span>
+                                // saves user data for application across activites
+<span class="fc" id="L84">                                SharedPreferences.Editor editor = getSharedPreferences(&quot;Login&quot;, MODE_PRIVATE).edit();</span>
+<span class="fc" id="L85">                                editor.putString(&quot;name&quot;, name);</span>
+<span class="fc" id="L86">                                editor.putString(&quot;password&quot;, pass);</span>
+<span class="fc" id="L87">                                editor.putInt(&quot;color&quot;, color);</span>
+<span class="fc" id="L88">                                editor.putBoolean(&quot;isLogin&quot;, true);</span>
+<span class="fc" id="L89">                                editor.commit();</span>
+
+                                // saves city list data from database
+<span class="fc" id="L92">                                ArrayList&lt;String&gt; cities = new ArrayList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L94" title="All 2 branches covered.">                                for (DataSnapshot ds : dataSnapshot.child(&quot;cities&quot;).getChildren()) {</span>
+<span class="fc" id="L95">                                    cities.add((String) ds.getValue());</span>
+<span class="fc" id="L96">                                }</span>
+
+                                // saves data to and starts MainActivity intent
+<span class="fc" id="L99">                                startActivity(new Intent(</span>
+                                        LoginActivity.this, MainActivity.class)
+<span class="fc" id="L101">                                        .putExtra(&quot;cities&quot;, cities));</span>
+<span class="fc" id="L102">                                finish();</span>
+<span class="fc" id="L103">                            } else {</span>
+                                // incorrect password
+<span class="fc" id="L105">                                bar.setVisibility(View.GONE);</span>
+<span class="fc" id="L106">                                Toast.makeText(LoginActivity.this, &quot;Incorrect Password!&quot;, Toast.LENGTH_SHORT).show();</span>
+                            }
+
+<span class="fc" id="L109">                        } else {</span>
+                            // no username was found
+<span class="fc" id="L111">                            bar.setVisibility(View.GONE);</span>
+<span class="fc" id="L112">                            Toast.makeText(LoginActivity.this, &quot;Enter Correct Username!&quot;, Toast.LENGTH_SHORT).show();</span>
+                        }
+<span class="fc" id="L114">                    }</span>
+
+                    /**
+                     * Called when having trouble connecting to database
+                     * @param databaseError
+                     */
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+<span class="nc" id="L122">                        bar.setVisibility(View.GONE);</span>
+<span class="nc" id="L123">                        Toast.makeText(LoginActivity.this, &quot;A database error occurred.&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L124">                    }</span>
+                });
+            }
+<span class="fc" id="L127">        });</span>
+<span class="fc" id="L128">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
